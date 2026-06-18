@@ -16,13 +16,14 @@
             text-align: center; 
         }
 
-        /* Typography Image Header Styling */
-        .header-img {
-            max-width: 100%;
-            height: auto;
-            margin-bottom: 5px;
-            filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.3));
-        }
+        /* Typography/Crest Image Header Styling */
+.header-img {
+    max-width: 220px; /* Restricts the massive 1122px width to a clean, readable size */
+    height: auto;     /* Maintains the correct proportions so it doesn't distort */
+    margin-top: 30px; /* Gives it breathing room from the top of the browser screen */
+    margin-bottom: 15px; /* Sets a clean gap before your subtitle and search bar */
+    filter: drop-shadow(0px 6px 12px rgba(0,0,0,0.4)); /* Makes the crest pop off the dark background */
+}
 
         p.subtitle {
             color: #b3b3b3;
@@ -164,7 +165,7 @@
 <body>
 
     <!-- Typography Image instead of <h2> Text -->
-    <img class="header-img" src="./Kingdom%20Come.PNG" alt="Kingdom Come" onerror="this.style.display='none';">
+    <img class="header-img" src="./Kingdom Come.PNG" alt="Kingdom Come" onerror="this.style.display='none';">
     <p class="subtitle">Enter your full name to discover your House assignment.</p>
     
     <div class="search-container">
