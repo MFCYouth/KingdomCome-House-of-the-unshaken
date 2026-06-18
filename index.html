@@ -5,99 +5,140 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kingdom Come: House Lookup</title>
     <style>
+        /* Dark gray backdrop with a professional, clean tone */
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             max-width: 600px; 
             margin: 40px auto; 
             padding: 20px; 
-            background-color: #f9f9f9; 
+            background-color: #1e222b; 
+            color: #ffffff;
             text-align: center; 
         }
+
+        /* Typography Image Header Styling */
+        .header-img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 5px;
+            filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.3));
+        }
+
+        p.subtitle {
+            color: #b3b3b3;
+            font-size: 15px;
+            margin-top: 0;
+            margin-bottom: 25px;
+        }
+        
         .search-container {
             display: flex; 
             justify-content: center; 
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
+
+        /* Clean White Input Field */
         input { 
-            padding: 12px; 
+            padding: 14px; 
             width: 70%; 
-            border: 1px solid #ccc; 
-            border-radius: 6px; 
+            border: 2px solid #3a3f4d; 
+            border-radius: 6px 0 0 6px; 
             font-size: 16px; 
             box-sizing: border-box; 
+            background-color: #ffffff;
+            color: #1e222b;
+            outline: none;
+            transition: border-color 0.2s;
         }
+        input:focus {
+            border-color: #d4af37; /* Gold accent on focus */
+        }
+
+        /* Gold Action Button */
         button { 
-            padding: 12px 20px; 
+            padding: 14px 24px; 
             border: none; 
-            background-color: #5D3FD3; 
-            color: white; 
-            border-radius: 6px; 
+            background-color: #d4af37; 
+            color: #1e222b; 
+            border-radius: 0 6px 6px 0; 
             cursor: pointer; 
             font-size: 16px; 
-            margin-left: 5px; 
+            font-weight: bold;
+            transition: background-color 0.2s; 
         }
         button:hover { 
-            background-color: #4A2EAD; 
+            background-color: #c5a028; 
         }
+
         #results { 
             margin-top: 30px; 
             text-align: left; 
         }
         
-        /* Styled Search Result Card */
+        /* Dark Card with White Content and Gold Border Accent */
         .card { 
-            background: white; 
-            padding: 25px; 
+            background: #2a2f3b; 
+            padding: 30px; 
             margin: 15px 0; 
             border-radius: 12px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08); 
-            border-left: 8px solid #5D3FD3; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4); 
+            border-top: 5px solid #d4af37; 
             text-align: center; 
         }
         .card h3 { 
-            margin: 0 0 15px 0; 
-            color: #333; 
-            font-size: 24px; 
+            margin: 0 0 20px 0; 
+            color: #ffffff; 
+            font-size: 26px; 
+            border-bottom: 1px solid #3a3f4d;
+            padding-bottom: 10px;
         }
         .info-layout { 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
-            gap: 15px; 
-            margin-bottom: 20px; 
+            gap: 18px; 
+            margin-bottom: 25px; 
         }
         
-        /* Crest Image Style */
         .crest-img { 
-            max-width: 150px; 
+            max-width: 160px; 
             height: auto; 
             object-fit: contain; 
-            filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.15)); 
+            filter: drop-shadow(0px 6px 12px rgba(0,0,0,0.5)); 
         }
         
         .house-title { 
-            font-size: 22px; 
+            font-size: 24px; 
             font-weight: bold; 
-            color: #5D3FD3; 
+            color: #d4af37; 
             margin: 5px 0; 
+            letter-spacing: 0.5px;
         }
         .house-desc { 
             font-style: italic; 
-            color: #555; 
+            color: #dcdcdc; 
             max-width: 450px; 
-            line-height: 1.5; 
+            line-height: 1.6; 
             font-size: 15px; 
             white-space: pre-line; 
         }
+
+        /* Meta details boxed cleanly inside the card */
         .details-box { 
             width: 100%; 
             text-align: left; 
-            background: #f4f2ff; 
-            padding: 14px; 
-            border-radius: 6px; 
+            background: #232731; 
+            padding: 16px; 
+            border-radius: 8px; 
             box-sizing: border-box; 
-            line-height: 1.6;
+            line-height: 1.8;
+            border-left: 3px solid #d4af37;
+            font-size: 15px;
+            color: #e5e5e5;
+        }
+        .details-box strong {
+            color: #d4af37;
         }
         
         /* Discord Button Style */
@@ -106,22 +147,25 @@
             background-color: #5865F2; 
             color: white; 
             text-decoration: none; 
-            padding: 12px 24px; 
+            padding: 14px 28px; 
             border-radius: 6px; 
             font-weight: bold; 
             font-size: 16px; 
-            margin-top: 15px; 
-            transition: background 0.2s; 
+            margin-top: 20px; 
+            box-shadow: 0 4px 10px rgba(88, 101, 242, 0.3);
+            transition: background-color 0.2s, transform 0.1s; 
         }
         .discord-btn:hover { 
             background-color: #4752C4; 
+            transform: translateY(-1px);
         }
     </style>
 </head>
 <body>
 
-    <h2>🏰 Kingdom Come: House Lookup</h2>
-    <p>Enter your full name to look up your assignment for <strong>House of The Unshaken</strong>.</p>
+    <!-- Typography Image instead of <h2> Text -->
+    <img class="header-img" src="./kingdom come - typography.png" alt="Kingdom Come" onerror="this.style.display='none';">
+    <p class="subtitle">Enter your full name to discover your House assignment.</p>
     
     <div class="search-container">
         <input type="text" id="searchInp" placeholder="Type your full name...">
@@ -131,10 +175,8 @@
     <div id="results"></div>
 
     <script>
-        // ⚠️ REPLACE WITH YOUR ACTUAL GOOGLE APPS SCRIPT WEB APP URL
         const API_URL = "https://script.google.com/macros/s/AKfycbwo0811R7pUn3gdyAHx51DLSqkGZQfpJcRDAOgIfTqik6wgw4SKTL5_giGB05E4HnoL/exec";
 
-        // 🔗 PASTE YOUR PRIVATE HOUSE DISCORD LINKS HERE
         const discordLinks = {
             "Pillars of Purity": "https://discord.gg/tvEGQUUKu5",
             "Champions of Courage": "https://discord.gg/C2xJpGFQTP",
@@ -150,11 +192,11 @@
             const resultsDiv = document.getElementById('results');
             
             if (!query) {
-                resultsDiv.innerHTML = "<p style='color:#D2143A;'>Please enter a name to search.</p>";
+                resultsDiv.innerHTML = "<p style='color:#e63946; font-weight:bold;'>Please enter a name to search.</p>";
                 return;
             }
 
-            resultsDiv.innerHTML = "<p style='color:#777;'>Searching the gathering records...</p>";
+            resultsDiv.innerHTML = "<p style='color:#b3b3b3;'>Searching the gathering records...</p>";
 
             try {
                 const response = await fetch(`${API_URL}?q=${encodeURIComponent(query)}`);
@@ -163,28 +205,24 @@
                 resultsDiv.innerHTML = ""; 
 
                 if (data.length === 0) {
-                    resultsDiv.innerHTML = "<p>No matches found. Make sure it matches your registration name exactly!</p>";
+                    resultsDiv.innerHTML = "<p style='color:#b3b3b3; text-align:center;'>No matches found. Make sure it matches your registration name exactly!</p>";
                     return;
                 }
 
                 for (const person of data) {
                     const houseName = person.kingdomComeHouses ? person.kingdomComeHouses.trim() : "";
                     
-                    // Explicitly point to the current root directory using "./"
                     const imageSrc = houseName ? `./${encodeURIComponent(houseName)}.png` : './generic-crest.png';
                     const textSrc = houseName ? `./${encodeURIComponent(houseName)}.txt` : '';
                     const discordLink = discordLinks[houseName] || "https://discord.gg/GENERAL_CAMP_INVITE";
 
-                    let descriptionText = "Welcome to the gathering! Connect with your house leadership below.";
+                    let descriptionText = "Connect with your house below.";
 
-                    // Dynamically fetch the text file from the same directory branch
                     if (textSrc) {
                         try {
                             const txtResponse = await fetch(textSrc);
                             if (txtResponse.ok) {
                                 descriptionText = await txtResponse.text();
-                            } else {
-                                console.warn(`Text file not found, defaulting description for: ${houseName}`);
                             }
                         } catch (txtErr) {
                             console.error("Could not fetch description file:", txtErr);
@@ -216,7 +254,7 @@
 
             } catch (error) {
                 console.error(error);
-                resultsDiv.innerHTML = "<p style='color:#D2143A;'>Error connecting to the database. Please try again later.</p>";
+                resultsDiv.innerHTML = "<p style='color:#e63946; font-weight:bold;'>Error connecting to the database. Please try again later.</p>";
             }
         }
     </script>
