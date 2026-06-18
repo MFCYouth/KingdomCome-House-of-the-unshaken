@@ -323,7 +323,7 @@
                     const textSrc = houseName ? `./${encodeURIComponent(houseName)}.txt` : '';
                     const discordLink = discordLinks[houseName] || "https://discord.gg/GENERAL_CAMP_INVITE";
 
-                    let descriptionText = "Your house awaits! Connect with your house below.";
+                    let descriptionText = "Are you ready?";
 
                     if (textSrc) {
                         try {
@@ -347,12 +347,8 @@
                             <div class="house-desc">"${descriptionText}"</div>
                         </div>
 
-                        <div class="details-box">
-                            <strong>📍 Area / Chapter:</strong> ${person.areaAndChapter || 'N/A'}
-                        </div>
-
                         <a href="${discordLink}" target="_blank" class="discord-btn">
-                            💬 Join Your Private House Discord
+                            💬 Your house awaits.
                         </a>
                     `;
                     resultsDiv.appendChild(card);
