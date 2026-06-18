@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kingdom Come: House Lookup</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; background-color: #f9f9f9; text-align: center; }
+        input { padding: 12px; width: 70%; border: 1px solid #ccc; border-radius: 6px; font-size: 16px; box-sizing: border-box; }
+        button { padding: 12px 20px; border: none; background-color: #5D3FD3; color: white; border-radius: 6px; cursor: pointer; font-size: 16px; margin-left: 5px; }
+        button:hover { background-color: #4A2EAD; }
+        #results { margin-top: 30px; text-align: left; }
+        .card { background: white; padding: 20px; margin: 15px 0; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-left: 6px solid #5D3FD3; }
+        .card h3 { margin: 0 0 10px 0; color: #333; }
+        .info-line { margin: 6px 0; color: #555; }
+        .badge { background-color: #E6E6FA; color: #5D3FD3; padding: 3px 8px; border-radius: 4px; font-weight: bold; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <h2>🏰 Kingdom Come: House Lookup</h2>
+    <p>Enter your full name to look up your assignment for <strong>House of The Unshaken</strong>.</p>
+    
+    <div style="display: flex; justify-content: center; align-items: center;">
+        <input type="text" id="searchInp" placeholder="Type your full name...">
+        <button onclick="searchHouse()">Search</button>
+    </div>
+
+    <div id="results"></div>
+
+    <script>
+        // ⚠️ REPLACE THIS WITH YOUR RE-DEPLOYED GOOGLE APPS SCRIPT WEB APP URL
+        const API_URL = "https://script.google.com/macros/s/AKfycbwo0811R7pUn3gdyAHx51DLSqkGZQfpJcRDAOgIfTqik6wgw4SKTL5_giGB05E4HnoL/exec";
+
+        async function searchHouse() {
+            const query = document.getElementById('searchInp').value.trim();
+            const resultsDiv = document.getElementById('results');
+            
+            if (!query) {
+                resultsDiv.innerHTML = "<p style='color:#D2143A;'>Please enter a name to search.</p>";
+                return;
+            }
+
+            resultsDiv.innerHTML = "<p style='color:#777;'>Searching the gathering records...</p>";
+
+            try {
+                const response = await fetch(`${API_URL}?q=${encodeURIComponent(query)}`);
+                const data = await response.json();
+
+                resultsDiv.innerHTML = ""; 
+
+                if (data.length === 0) {
+                    resultsDiv.innerHTML = "<p>No matches found. Make sure it matches your registration name exactly!</p>";
+                    return;
+                }
+
+                data.forEach(person => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML = `
+                        <h3>${person.fullName}</h3>
+                        <div class="info-line"><strong>House:</strong> <span class="badge">${person.kingdomComeHouses || 'Not Assigned'}</span></div>
+                        <div class="info-line"><strong>Area / Chapter:</strong> ${person.areaAndChapter || 'N/A'}</div>
+                        <div class="info-line"><strong>Gender:</strong> ${person.gender || 'N/A'}</div>
+                    `;
+                    resultsDiv.appendChild(card);
+                });
+
+            } catch (error) {
+                console.error(error);
+                resultsDiv.innerHTML = "<p style='color:#D2143A;'>Error connecting to the database. Please try again in a moment.</p>";
+            }
+        }
+    </script>
+</body>
+</html>
