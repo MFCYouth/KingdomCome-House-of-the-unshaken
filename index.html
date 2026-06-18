@@ -124,7 +124,7 @@
     <p>Enter your full name to look up your assignment for <strong>House of The Unshaken</strong>.</p>
     
     <div class="search-container">
-        <input type="text" id="searchInp" placeholder="Type your full name...">
+        <input type="text" id="searchInp" placeholder="Enter your First and Last Name Here:">
         <button onclick="searchHouse()">Search</button>
     </div>
 
@@ -136,13 +136,13 @@
 
         // 🔗 PASTE YOUR PRIVATE HOUSE DISCORD LINKS HERE
         const discordLinks = {
-            "Pillars of Purity": "https://discord.gg/YOUR_PILLARS_LINK",
-            "Champions of Courage": "https://discord.gg/YOUR_CHAMPIONS_LINK",
-            "Seekers of Self Mastery": "https://discord.gg/YOUR_SEEKERS_LINK",
-            "Keepers of Knowledge": "https://discord.gg/YOUR_KEEPERS_LINK",
-            "Heralds of Hope": "https://discord.gg/YOUR_HERALDS_LINK",
-            "Restorers of Reverence": "https://discord.gg/YOUR_REVERENCE_LINK",
-            "Stewards of Simplicity": "https://discord.gg/YOUR_STEWARDS_LINK"
+            "Pillars of Purity": "https://discord.gg/ezxFYndmVC",
+            "Champions of Courage": "https://discord.gg/5UHaavad7j",
+            "Seekers of Self-Mastery": "https://discord.gg/varamNQMzU",
+            "Keepers of Knowledge": "https://discord.gg/yDSrAf5ekd",
+            "Heralds of Hope": "https://discord.gg/9N4ZdtrkJJ",
+            "Restorers of Reverence": "https://discord.gg/U3dA79by2g",
+            "Stewards of Simplicity": "https://discord.gg/jVs4Cpxms9"
         };
 
         async function searchHouse() {
@@ -176,7 +176,7 @@
                     const textSrc = houseName ? `${encodeURIComponent(houseName)}.txt` : '';
                     const discordLink = discordLinks[houseName] || "https://discord.gg/GENERAL_CAMP_INVITE";
 
-                    let descriptionText = "Welcome to the gathering! Connect with your house leadership below.";
+                    let descriptionText = "Your house awaits! Connect with your house below.";
 
                     // If a specific house text file exists, fetch its contents from your GitHub
                     if (textSrc) {
@@ -203,8 +203,7 @@
                         </div>
 
                         <div class="details-box">
-                            <strong>📍 Area / Chapter:</strong> ${person.areaAndChapter || 'N/A'}<br>
-                            <strong>🧬 Gender:</strong> ${person.gender || 'N/A'}
+                            <strong>📍 Area / Chapter:</strong> ${person.areaAndChapter || 'N/A'}
                         </div>
 
                         <a href="${discordLink}" target="_blank" class="discord-btn">
