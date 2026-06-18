@@ -34,7 +34,7 @@
             text-align: center;
         }
 
-        /* Automatically downscales your massive 1122x1402px PNG header perfectly */
+        /* Automatically downscales your massive PNG header perfectly */
         .header-img {
             max-width: 200px;
             width: 100%;
@@ -55,13 +55,40 @@
             margin: 0 0 25px 0;
         }
         
-        /* Seamless, mobile-responsive input bar */
+        /* Clean vertical stack for search inputs on mobile/desktop */
         .search-container {
             display: flex; 
+            flex-direction: column;
             justify-content: center; 
             align-items: center;
             width: 100%;
+            gap: 12px;
             margin-bottom: 30px;
+        }
+
+        /* Styled Dropdown Cluster Menu */
+        select {
+            padding: 14px;
+            width: 100%;
+            border: 2px solid #3a3f4d;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+            background-color: #2a2f3b;
+            color: #ffffff;
+            outline: none;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+        select:focus {
+            border-color: #d4af37;
+        }
+
+        /* Row box combining input and button seamlessly */
+        .input-group {
+            display: flex;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         input { 
@@ -78,7 +105,7 @@
             transition: border-color 0.2s;
         }
         input:focus {
-            border-color: #d4af37; /* Metallic Gold focus outline */
+            border-color: #d4af37; 
         }
 
         button { 
@@ -190,7 +217,7 @@
         /* 📱 Mobile Specific Scaling Adjustments */
         @media (max-width: 480px) {
             h2 { font-size: 20px; }
-            input, button { padding: 12px; font-size: 14px; }
+            select, input, button { padding: 12px; font-size: 14px; }
             .card { padding: 20px; }
             .card h3 { font-size: 20px; }
             .house-title { font-size: 18px; }
@@ -200,19 +227,34 @@
 </head>
 <body>
 
-    <!-- Wrapped everything inside here to lock it in the center of the web view -->
     <div class="page-wrapper">
         <div class="content-container">
 
-            <!-- Added Header Image Back into the Code Body Natively -->
             <img class="header-img" src="./KingdomCome.png" alt="Kingdom Come Crest" onerror="this.style.display='none';">
 
             <h2>🏰 Kingdom Come: House Lookup</h2>
-            <p class="subtitle">Enter your full name to look up your assignment for <strong>House of The Unshaken</strong>.</p>
+            <p class="subtitle">Select your Area/Chapter and type your name to discover your assignment.</p>
             
             <div class="search-container">
-                <input type="text" id="searchInp" placeholder="Enter your First and Last Name Here:">
-                <button onclick="searchHouse()">Search</button>
+                <select id="clusterSel">
+                    <option value="">-- Select Your Area & Chapter --</option>
+                    <option value="ALBERTA - Calgary">ALBERTA - Calgary</option>
+                    <option value="ALBERTA - Central Alberta">ALBERTA - Central Alberta</option>
+                    <option value="ALBERTA - Edmonton">ALBERTA - Edmonton</option>
+                    <option value="BRITISH COLUMBIA - Vancouver">BRITISH COLUMBIA - Vancouver</option>
+                    <option value="MANITOBA - Steinbach">MANITOBA - Steinbach</option>
+                    <option value="MANITOBA - Winnipeg">MANITOBA - Winnipeg</option>
+                    <option value="ONTARIO - GTA East">ONTARIO - GTA East</option>
+                    <option value="ONTARIO - GTA West">ONTARIO - GTA West</option>
+                    <option value="QUEBEC - Montreal">QUEBEC - Montreal</option>
+                    <option value="SASKATCHEWAN - Saskatoon">SASKATCHEWAN - Saskatoon</option>
+                    <option value="SASKATCHEWAN - Yorkton">SASKATCHEWAN - Yorkton</option>
+                </select>
+
+                <div class="input-group">
+                    <input type="text" id="searchInp" placeholder="Type your name here...">
+                    <button onclick="searchHouse()">Search</button>
+                </div>
             </div>
 
             <div id="results"></div>
@@ -235,27 +277,40 @@
 
         async function searchHouse() {
             const query = document.getElementById('searchInp').value.trim();
+            const chosenCluster = document.getElementById('clusterSel').value;
             const resultsDiv = document.getElementById('results');
             
+            // Validation: Require both inputs for a highly targeted search
+            if (!chosenCluster) {
+                resultsDiv.innerHTML = "<p style='color:#e63946; font-weight:bold; text-align:center;'>Please select your Area & Chapter first.</p>";
+                return;
+            }
             if (!query) {
-                resultsDiv.innerHTML = "<p style='color:#e63946; font-weight:bold;'>Please enter a name to search.</p>";
+                resultsDiv.innerHTML = "<p style='color:#e63946; font-weight:bold; text-align:center;'>Please type your name to search.</p>";
                 return;
             }
 
-            resultsDiv.innerHTML = "<p style='color:#b3b3b3;'>Searching the gathering records...</p>";
+            resultsDiv.innerHTML = "<p style='color:#b3b3b3; text-align:center;'>Searching the gathering records...</p>";
 
             try {
+                // Fetch records matching the user's string query
                 const response = await fetch(`${API_URL}?q=${encodeURIComponent(query)}`);
                 const data = await response.json();
 
                 resultsDiv.innerHTML = ""; 
 
-                if (data.length === 0) {
-                    resultsDiv.innerHTML = "<p style='color:#b3b3b3; text-align:center;'>No matches found. Make sure it matches your registration name exactly!</p>";
+                // Filter results to ensure they ALSO belong to the chosen dropdown cluster
+                const filteredData = data.filter(person => {
+                    const personCluster = person.areaAndChapter ? person.areaAndChapter.trim().toLowerCase() : "";
+                    return personCluster === chosenCluster.toLowerCase();
+                });
+
+                if (filteredData.length === 0) {
+                    resultsDiv.innerHTML = "<p style='color:#b3b3b3; text-align:center;'>No matches found in that chapter. Double check your spelling or chosen chapter!</p>";
                     return;
                 }
 
-                for (const person of data) {
+                for (const person of filteredData) {
                     const houseName = person.kingdomComeHouses ? person.kingdomComeHouses.trim() : "";
                     
                     const imageSrc = houseName ? `./${encodeURIComponent(houseName)}.png` : 'generic-crest.png';
@@ -299,7 +354,7 @@
 
             } catch (error) {
                 console.error(error);
-                resultsDiv.innerHTML = "<p style='color:#e63946; font-weight:bold;'>Error connecting to the database. Please try again later.</p>";
+                resultsDiv.innerHTML = "<p style='color:#e63946; font-weight:bold; text-align:center;'>Error connecting to the database. Please try again later.</p>";
             }
         }
     </script>
