@@ -5,44 +5,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kingdom Come: House Lookup</title>
     <style>
-        /* Dark gray backdrop with a professional, clean tone */
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            max-width: 600px; 
-            margin: 40px auto; 
-            padding: 20px; 
-            background-color: #1e222b; 
+        /* Modern CSS reset & premium deep slate background */
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: #1e222b;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: #ffffff;
-            text-align: center; 
         }
 
-        /* Typography/Crest Image Header Styling */
-.header-img {
-    max-width: 220px; /* Restricts the massive 1122px width to a clean, readable size */
-    height: auto;     /* Maintains the correct proportions so it doesn't distort */
-    margin-top: 30px; /* Gives it breathing room from the top of the browser screen */
-    margin-bottom: 15px; /* Sets a clean gap before your subtitle and search bar */
-    filter: drop-shadow(0px 6px 12px rgba(0,0,0,0.4)); /* Makes the crest pop off the dark background */
-}
+        /* Flexbox layout to perfectly center the core content vertically and horizontally */
+        .page-wrapper {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 20px;
+        }
+
+        /* Main app container restriction for ideal readability */
+        .content-container {
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        /* Automatically downscales your massive 1122x1402px PNG header perfectly */
+        .header-img {
+            max-width: 200px;
+            width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+            filter: drop-shadow(0px 6px 12px rgba(0,0,0,0.4));
+        }
+
+        h2 {
+            font-size: 24px;
+            color: #ffffff;
+            margin: 0 0 10px 0;
+        }
 
         p.subtitle {
             color: #b3b3b3;
             font-size: 15px;
-            margin-top: 0;
-            margin-bottom: 25px;
+            margin: 0 0 25px 0;
         }
         
+        /* Seamless, mobile-responsive input bar */
         .search-container {
             display: flex; 
             justify-content: center; 
             align-items: center;
+            width: 100%;
             margin-bottom: 30px;
         }
 
-        /* Clean White Input Field */
         input { 
             padding: 14px; 
-            width: 70%; 
+            flex-grow: 1;
+            width: 60%;
             border: 2px solid #3a3f4d; 
             border-radius: 6px 0 0 6px; 
             font-size: 16px; 
@@ -53,10 +78,9 @@
             transition: border-color 0.2s;
         }
         input:focus {
-            border-color: #d4af37; /* Gold accent on focus */
+            border-color: #d4af37; /* Metallic Gold focus outline */
         }
 
-        /* Gold Action Button */
         button { 
             padding: 14px 24px; 
             border: none; 
@@ -67,30 +91,34 @@
             font-size: 16px; 
             font-weight: bold;
             transition: background-color 0.2s; 
+            box-sizing: border-box;
         }
         button:hover { 
             background-color: #c5a028; 
         }
 
+        /* Results container aligns left natively for cleaner card profiles */
         #results { 
-            margin-top: 30px; 
+            width: 100%;
+            margin-top: 10px; 
             text-align: left; 
         }
         
-        /* Dark Card with White Content and Gold Border Accent */
+        /* Dark Card Layout with White Text & Gold Accent */
         .card { 
             background: #2a2f3b; 
-            padding: 30px; 
+            padding: 25px; 
             margin: 15px 0; 
             border-radius: 12px; 
             box-shadow: 0 10px 25px rgba(0,0,0,0.4); 
             border-top: 5px solid #d4af37; 
             text-align: center; 
+            box-sizing: border-box;
         }
         .card h3 { 
             margin: 0 0 20px 0; 
             color: #ffffff; 
-            font-size: 26px; 
+            font-size: 24px; 
             border-bottom: 1px solid #3a3f4d;
             padding-bottom: 10px;
         }
@@ -98,42 +126,40 @@
             display: flex; 
             flex-direction: column; 
             align-items: center; 
-            gap: 18px; 
-            margin-bottom: 25px; 
+            gap: 15px; 
+            margin-bottom: 20px; 
         }
         
         .crest-img { 
-            max-width: 160px; 
+            max-width: 140px; 
             height: auto; 
             object-fit: contain; 
             filter: drop-shadow(0px 6px 12px rgba(0,0,0,0.5)); 
         }
         
         .house-title { 
-            font-size: 24px; 
+            font-size: 22px; 
             font-weight: bold; 
             color: #d4af37; 
             margin: 5px 0; 
-            letter-spacing: 0.5px;
         }
         .house-desc { 
             font-style: italic; 
             color: #dcdcdc; 
             max-width: 450px; 
-            line-height: 1.6; 
+            line-height: 1.5; 
             font-size: 15px; 
             white-space: pre-line; 
         }
 
-        /* Meta details boxed cleanly inside the card */
         .details-box { 
             width: 100%; 
             text-align: left; 
             background: #232731; 
-            padding: 16px; 
+            padding: 14px; 
             border-radius: 8px; 
             box-sizing: border-box; 
-            line-height: 1.8;
+            line-height: 1.6;
             border-left: 3px solid #d4af37;
             font-size: 15px;
             color: #e5e5e5;
@@ -142,50 +168,69 @@
             color: #d4af37;
         }
         
-        /* Discord Button Style */
         .discord-btn { 
             display: inline-block; 
             background-color: #5865F2; 
             color: white; 
             text-decoration: none; 
-            padding: 14px 28px; 
+            padding: 14px 24px; 
             border-radius: 6px; 
             font-weight: bold; 
             font-size: 16px; 
             margin-top: 20px; 
             box-shadow: 0 4px 10px rgba(88, 101, 242, 0.3);
             transition: background-color 0.2s, transform 0.1s; 
+            width: 100%;
+            box-sizing: border-box;
         }
         .discord-btn:hover { 
             background-color: #4752C4; 
-            transform: translateY(-1px);
+        }
+
+        /* 📱 Mobile Specific Scaling Adjustments */
+        @media (max-width: 480px) {
+            h2 { font-size: 20px; }
+            input, button { padding: 12px; font-size: 14px; }
+            .card { padding: 20px; }
+            .card h3 { font-size: 20px; }
+            .house-title { font-size: 18px; }
+            .house-desc { font-size: 14px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Typography Image instead of <h2> Text -->
-    <img class="header-img" src="./Kingdom Come.PNG" alt="Kingdom Come" onerror="this.style.display='none';">
-    <p class="subtitle">Enter your full name to discover your House assignment.</p>
-    
-    <div class="search-container">
-        <input type="text" id="searchInp" placeholder="Type your full name...">
-        <button onclick="searchHouse()">Search</button>
-    </div>
+    <!-- Wrapped everything inside here to lock it in the center of the web view -->
+    <div class="page-wrapper">
+        <div class="content-container">
 
-    <div id="results"></div>
+            <!-- Added Header Image Back into the Code Body Natively -->
+            <img class="header-img" src="./Kingdom%20Come.PNG" alt="Kingdom Come Crest" onerror="this.style.display='none';">
+
+            <h2>🏰 Kingdom Come: House Lookup</h2>
+            <p class="subtitle">Enter your full name to look up your assignment for <strong>House of The Unshaken</strong>.</p>
+            
+            <div class="search-container">
+                <input type="text" id="searchInp" placeholder="Enter your First and Last Name Here:">
+                <button onclick="searchHouse()">Search</button>
+            </div>
+
+            <div id="results"></div>
+
+        </div>
+    </div>
 
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbwo0811R7pUn3gdyAHx51DLSqkGZQfpJcRDAOgIfTqik6wgw4SKTL5_giGB05E4HnoL/exec";
 
         const discordLinks = {
-            "Pillars of Purity": "https://discord.gg/tvEGQUUKu5",
-            "Champions of Courage": "https://discord.gg/C2xJpGFQTP",
-            "Seekers of Self Mastery": "https://discord.gg/ZvfQ8DrF7n",
-            "Keepers of Knowledge": "https://discord.gg/rDvX7CgEnn",
-            "Heralds of Hope": "https://discord.gg/v9Ayx2P7Wh",
-            "Restorers of Reverence": "https://discord.gg/RnP6RWh7sz",
-            "Stewards of Simplicity": "https://discord.gg/xS5AXqd7BX"
+            "Pillars of Purity": "https://discord.gg/ezxFYndmVC",
+            "Champions of Courage": "https://discord.gg/5UHaavad7j",
+            "Seekers of Self-Mastery": "https://discord.gg/varamNQMzU",
+            "Keepers of Knowledge": "https://discord.gg/yDSrAf5ekd",
+            "Heralds of Hope": "https://discord.gg/9N4ZdtrkJJ",
+            "Restorers of Reverence": "https://discord.gg/U3dA79by2g",
+            "Stewards of Simplicity": "https://discord.gg/jVs4Cpxms9"
         };
 
         async function searchHouse() {
@@ -213,11 +258,11 @@
                 for (const person of data) {
                     const houseName = person.kingdomComeHouses ? person.kingdomComeHouses.trim() : "";
                     
-                    const imageSrc = houseName ? `./${encodeURIComponent(houseName)}.png` : './generic-crest.png';
+                    const imageSrc = houseName ? `./${encodeURIComponent(houseName)}.png` : 'generic-crest.png';
                     const textSrc = houseName ? `./${encodeURIComponent(houseName)}.txt` : '';
                     const discordLink = discordLinks[houseName] || "https://discord.gg/GENERAL_CAMP_INVITE";
 
-                    let descriptionText = "Connect with your house below.";
+                    let descriptionText = "Your house awaits! Connect with your house below.";
 
                     if (textSrc) {
                         try {
@@ -236,13 +281,13 @@
                         <h3>Welcome, ${person.fullName}!</h3>
                         
                         <div class="info-layout">
-                            <img class="crest-img" src="${imageSrc}" alt="${houseName} Crest" onerror="this.src='./generic-crest.png';">
+                            <img class="crest-img" src="${imageSrc}" alt="${houseName} Crest" onerror="this.src='generic-crest.png';">
                             <div class="house-title">${houseName || 'Assignment Pending'}</div>
                             <div class="house-desc">"${descriptionText}"</div>
                         </div>
 
                         <div class="details-box">
-                            <strong>📍 Area / Chapter:</strong> ${person.areaAndChapter || 'N/A'}<br>
+                            <strong>📍 Area / Chapter:</strong> ${person.areaAndChapter || 'N/A'}
                         </div>
 
                         <a href="${discordLink}" target="_blank" class="discord-btn">
