@@ -178,22 +178,6 @@
             font-size: 15px; 
             white-space: pre-line; 
         }
-
-        .details-box { 
-            width: 100%; 
-            text-align: left; 
-            background: #232731; 
-            padding: 14px; 
-            border-radius: 8px; 
-            box-sizing: border-box; 
-            line-height: 1.6;
-            border-left: 3px solid #d4af37;
-            font-size: 15px;
-            color: #e5e5e5;
-        }
-        .details-box strong {
-            color: #d4af37;
-        }
         
         .discord-btn { 
             display: inline-block; 
@@ -212,6 +196,13 @@
         }
         .discord-btn:hover { 
             background-color: #4752C4; 
+        }
+
+        .cc-notice {
+            margin-top: 20px;
+            color: #b3b3b3;
+            font-style: italic;
+            font-size: 14px;
         }
 
         /* 📱 Mobile Specific Scaling Adjustments */
@@ -258,10 +249,10 @@
             </div>
 
             <div style="margin-top: 5px; margin-bottom: 25px; color: #b3b3b3; line-height: 1.6; font-size: 15px;">
-    Let the journey begin. God speed.<br>
-    <span style="color: #d4af37; font-style: italic;">"Come, follow me."</span><br>
-    <span style="font-size: 13px; opacity: 0.8;">- Matthew 4:19</span>
-</div>
+                Let the journey begin. God speed.<br>
+                <span style="color: #d4af37; font-style: italic;">"Come, follow me."</span><br>
+                <span style="font-size: 13px; opacity: 0.8;">- Matthew 4:19</span>
+            </div>
 
             <div id="results"></div>
 
@@ -286,7 +277,6 @@
             const chosenCluster = document.getElementById('clusterSel').value;
             const resultsDiv = document.getElementById('results');
             
-            // Validation: Require both inputs for a highly targeted search
             if (!chosenCluster) {
                 resultsDiv.innerHTML = "<p style='color:#e63946; font-weight:bold; text-align:center;'>Please select your Area & Chapter first.</p>";
                 return;
@@ -299,13 +289,11 @@
             resultsDiv.innerHTML = "<p style='color:#b3b3b3; text-align:center;'>Searching the gathering records...</p>";
 
             try {
-                // Fetch records matching the user's string query
                 const response = await fetch(`${API_URL}?q=${encodeURIComponent(query)}`);
                 const data = await response.json();
 
                 resultsDiv.innerHTML = ""; 
 
-                // Filter results to ensure they ALSO belong to the chosen dropdown cluster
                 const filteredData = data.filter(person => {
                     const personCluster = person.areaAndChapter ? person.areaAndChapter.trim().toLowerCase() : "";
                     return personCluster === chosenCluster.toLowerCase();
@@ -318,6 +306,7 @@
 
                 for (const person of filteredData) {
                     const houseName = person.kingdomComeHouses ? person.kingdomComeHouses.trim() : "";
+                    const userRole = person.role ? person.role.trim().toUpperCase() : "";
                     
                     const imageSrc = houseName ? `./${encodeURIComponent(houseName)}.png` : 'generic-crest.png';
                     const textSrc = houseName ? `./${encodeURIComponent(houseName)}.txt` : '';
@@ -336,6 +325,18 @@
                         }
                     }
 
+                    // Dynamic element construction based on the parsed role field
+                    let actionElement = "";
+                    if (userRole === "CC") {
+                        actionElement = `<p class="cc-notice">Chapter Coordinator profile verified. Please connect directly with the House Leads for portal access.</p>`;
+                    } else {
+                        actionElement = `
+                            <a href="${discordLink}" target="_blank" class="discord-btn">
+                                💬 Your house awaits.
+                            </a>
+                        `;
+                    }
+
                     const card = document.createElement('div');
                     card.className = 'card';
                     card.innerHTML = `
@@ -347,9 +348,7 @@
                             <div class="house-desc">"${descriptionText}"</div>
                         </div>
 
-                        <a href="${discordLink}" target="_blank" class="discord-btn">
-                            💬 Your house awaits.
-                        </a>
+                        ${actionElement}
                     `;
                     resultsDiv.appendChild(card);
                 }
